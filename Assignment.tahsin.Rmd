@@ -5,26 +5,144 @@ date: "6/6/2020"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-## R Markdown
+# GENE EXPRESSION FILE
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# How to download file
+download.file(url = "https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv", 
+              destfile = "gene_expression.tsv")
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# Question 1
 
-```{r cars}
-summary(cars)
-```
+## Reading file into RSTudio
+x <- read.table("gene_expression.tsv")
+head(x)
+## To check structure of data 
+str(x)
+## if there are headers in raw data then add header=TRUE
+x <- read.table("gene_expression.tsv", header = TRUE)
+head(x)
+## To check structure of data if it's saved as numeric
+str(x)
+## To deactivate the default setting of recognising strings as factors
+x <- read.table("gene_expression.tsv", header = TRUE, stringsAsFactors = FALSE)
+head(x)
+## To confirm if data is saved as numeric
+str(x)
+## If the first column is the row name then add row.names=1
+x <- read.table("gene_expression.tsv", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+head(x)
+str(x)
 
-## Including Plots
+# Question 2
 
-You can also embed plots, for example:
+## To find the mean of rows
+x$Mean <- rowMeans(x)
+head(x)
+str(x)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+# Question 3
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## To determine 10 genes with highest mean expression, let a=descending mean expression value
+a <- x[order(-x$Mean),]
+head(a,10)
+## To make a list of 10 genes with highest mean expression, let y=rownames
+y <- rownames(a, do.NULL = TRUE, prefix = "row")
+head(y,10)
+
+# Question 4
+## To filter genes with means less than 10
+subset(x, x$Mean < 10)
+## To find number of genes (rows) with mean less than 10
+nrow(subset(x, x$Mean < 10))
+
+# Question 5 
+
+## How to make a histogram of mean
+hist(x$Mean)
+hist(x$Mean, breaks = 20)
+hist(x$Mean, xlab = "Mean Value",col="blue",breaks = 20)
+
+
+# GROWTH DATA FILE
+
+# How to download file
+download.file(url = "https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/growth_data.csv", 
+              destfile = "growth_data.csv")
+
+## Reading file into RSTudio
+d <- read.csv("growth_data.csv")
+head(d)
+## To check structure of data 
+str(d)
+## To deactivate the default setting of recognising strings as factors and remove extra headings
+d <- read.csv("growth_data.csv", stringsAsFactors = FALSE, header = TRUE)
+head(d)
+str(d)
+
+#Question 6
+
+## To find column names
+colnames(d, do.NULL = TRUE, prefix = "col")
+
+# Question 7 
+
+## To calculate mean
+### To do row-wise subsetting for Site=="southwest"
+d_sw <- d[d$Site=="southwest", ]
+head(d_sw)
+### To do row-wise subsetting for Site=="northeast"
+d_ne <- d[d$Site=="northeast", ]
+head(d_ne)
+
+## To calculate standard deviation
+### To calculate standard deviation for Site=="northeast" 
+ne<-list()
+ne$mean<-colMeans(d_ne[,c(3,6)])
+ne$std<- c(sd(d_ne[,3]), sd(d_ne[,6]))
+# To present standard deviation for Site=="northeast"  
+ne <- as.data.frame(ne)
+head(ne)
+### To calculate standard deviation for Site=="southwest"
+sw<-list()
+sw$mean<-colMeans(d_sw[,c(3,6)])
+sw$sd<- c(sd(d_sw[,3]), sd(d_sw[,6]))
+# To present standard deviation for Site=="southwest" 
+sw <- as.data.frame(sw);
+head(sw)
+
+# Question 8
+
+## Making a boxplot
+ne <- subset(d, Site=="northeast")
+head(ne)
+sw <- subset(d, Site=="southwest")
+head(sw)
+boxplot(ne$Circumf_2004_cm, ne$Circumf_2019_cm, sw$Circumf_2004_cm, sw$Circumf_2019_cm)
+## To add names to x-axis and labelling y-axis
+boxplot(ne$Circumf_2004_cm, ne$Circumf_2019_cm, sw$Circumf_2004_cm, sw$Circumf_2019_cm, names = c("ne2004","ne2019","sw2004","sw2019"), ylab= "Circumference (cm)")
+## To add title to boxplot
+boxplot(ne$Circumf_2004_cm, ne$Circumf_2019_cm, sw$Circumf_2004_cm, sw$Circumf_2019_cm, names = c("ne2004","ne2019","sw2004","sw2019"), ylab= "Circumference (cm)", main="Growth at Northeast and Southwest sites")
+
+# Question 9
+
+## Mean growth in the past 10 years (2009 to 2019)
+### To find the change in circumference (Growth)
+ne$Growth <- ne$Circumf_2019_cm - ne$Circumf_2009_cm
+head(ne)
+### To find the change in circumference (Growth)
+sw$Growth <- sw$Circumf_2019_cm - sw$Circumf_2009_cm
+head(sw)
+### To find the mean growth in the past 10 years at both sites
+mean(ne$Growth)
+mean(sw$Growth)
+
+# Question 10 
+## To do a t.test
+t.test(ne$Growth, sw$Growth)
+## To do a wilcox.test
+wilcox.test(ne$Growth, sw$Growth)
+
+
+save.image("gene_expression.RData")
+load("gene_expression.RData")
