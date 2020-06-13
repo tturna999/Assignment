@@ -147,46 +147,48 @@ save.image("gene_expression.RData")
 load("gene_expression.RData")
 
 #Part B Questions
-#Question 1
-#import libraries
+###Question 1
+####import libraries
 library("seqinr") 
 library("R.utils") 
 library("rBLAST") 
 library("ape")  
 library("ORFik")
 library("Biostrings")
-# download mutblast_functions from marks link
+####download mutblast_functions from marks link
 source("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/mutblast_functions.R") 
 
-# Download the E.colai data sequences
+#### Download the E.colai data sequences
 download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",destfile = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
 
-# unzip file
+#### unzip file
 R.utils::gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",overwrite=TRUE)
 # make blast data base
 makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa",dbtype="nucl", "-parse_seqids")
 
-# download the sequence need to be compared
+###Question 2
+#### download the sequence need to be compared
 download.file(url = "https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/sample.fa", destfile = "sample.fa.gz")
 
-#unzip file
+####unzip file
 R.utils::gunzip("sample.fa.gz",overwrite=TRUE)
 
-#read fasta file
+###Question 3
+####read fasta file
 SAMPLE <- read.fasta("sample.fa") 
-# we chose 70 sequence
+#### we chose 70 sequence
 sam <- SAMPLE[[70]]
 
-# check the structure of sam
+#### check the structure of sam
 str(sam)
 
-# get sequence lenth ( lenth of 70 th one)
+#### get sequence lenth ( lenth of 70 th one)
 seqinr::getLength(sam) 
 
-# get gc propotion of the sequence
+#### get gc propotion of the sequence
 seqinr::GC(sam)
 
-# run myblastn function
+#### run myblastn function
 myblastn_tab
 
 res <- myblastn_tab(myseq = SAMPLE, db = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
@@ -194,25 +196,27 @@ str(res)
 
 head(res)
 
-#find top 3 hits
+####find top 3 hits
 hits <- as.character(res$sseqid[1:3])
 hits
 db <- read.fasta("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
 
 tophit <- db[which(names(db) %in% hits[1])] # extract the names of the top hit
 tophit #[1:50]
-
+###Question 4
+####run blast
 seqinr::write.fasta(tophit,names=names(tophit),file.out = "tophit.fa")
 makeblastdb("tophit.fa",dbtype="nucl", "-parse_seqids")
 res <- myblastn(myseq = SAMPLE, db = "tophit.fa")
 cat(res,fill=TRUE)
+###mutator function
 mutator
-
 sam_mut <- mutator(myseq=sam,100)
 sam_mut_ <- DNAString(c2s(sam_mut))
 sam_ <- DNAString(c2s(sam))
 aln <- Biostrings::pairwiseAlignment(sam_,sam_mut_)
 pid(aln)
+###number of mismatches
 nmismatch(aln)
 
 write.fasta(sam,names="sam",file.out = "sam.fa")
