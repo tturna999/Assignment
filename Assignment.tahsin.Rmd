@@ -145,3 +145,13 @@ wilcox.test(ne$Growth, sw$Growth)
 
 save.image("gene_expression.RData")
 load("gene_expression.RData")
+
+#Part B Questions
+#Question 1
+#import libraries
+library("seqinr") 
+library("R.utils") 
+library("rBLAST") 
+library("ape")  
+library("ORFik")
+library("Biostrings")
