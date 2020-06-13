@@ -163,3 +163,14 @@ download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacter
 
 # unzip file
 R.utils::gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",overwrite=TRUE)
+# make blast data base
+makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa",dbtype="nucl", "-parse_seqids")
+
+# download the sequence need to be compared
+download.file(url = "https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/sample.fa", destfile = "sample.fa.gz")
+
+#unzip file
+R.utils::gunzip("sample.fa.gz",overwrite=TRUE)
+
+#read fasta file
+SAMPLE <- read.fasta("sample.fa") 
