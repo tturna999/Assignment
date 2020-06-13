@@ -1,6 +1,6 @@
 ---
 title: "Assignment"
-author: "Tahsin Turna"
+author: "Tahsin Turna,"
 date: "6/6/2020"
 output: html_document
 ---
@@ -17,9 +17,10 @@ library("rBLAST")
 library("ape")
 library("ORFik")
 library("Biostrings")
-# GENE EXPRESSION FILE
+
 # CONTENT
 
+## GENE EXPRESSION FILE
 ## How to download file
 download.file(url = "https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv", 
               destfile = "gene_expression.tsv")
