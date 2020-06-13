@@ -251,5 +251,8 @@ mean(replicate(50, kopp(sam,100) ))
 n<-c(30,60,90,120)
 haram<-function(n)mean(replicate(50, kopp(sam,100) ))
 sapply(n,haram)
+x <- as.data.frame(x)
 
+then head(x)
 
+#demo1.1 dfd
