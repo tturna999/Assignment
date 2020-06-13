@@ -223,14 +223,14 @@ seqinr::write.fasta(tophit,names=names(tophit),file.out = "tophit.fa")
 makeblastdb("tophit.fa",dbtype="nucl", "-parse_seqids")
 res <- myblastn(myseq = SAMPLE, db = "tophit.fa")
 cat(res,fill=TRUE)
-####mutator function
+#### mutator function
 mutator
 sam_mut <- mutator(myseq=sam,100)
 sam_mut_ <- DNAString(c2s(sam_mut))
 sam_ <- DNAString(c2s(sam))
 aln <- Biostrings::pairwiseAlignment(sam_,sam_mut_)
 pid(aln)
-####number of mismatches
+#### number of mismatches
 nmismatch(aln)
 
 write.fasta(sam,names="sam",file.out = "sam.fa")
