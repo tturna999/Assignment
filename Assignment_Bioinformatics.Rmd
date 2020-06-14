@@ -247,7 +247,7 @@ makeblastdb(file="sam.fa",dbtype = "nucl")
 sam_mut <- mutator(myseq=sam,100)
 res <- myblastn_tab(myseq = sam_mut, db = "sam.fa")
 res
-###Q5
+### Question 5
 ####function for mutation
 kopp <- function(sam, nmut=nmut) {
     mutseq <- mutator(myseq = sam, nmut = nmut)
@@ -261,7 +261,7 @@ mean(replicate(50, kopp(sam,100) ))
 n<-c(30,60,90,120)
 haram<-function(n)mean(replicate(50, kopp(sam,100) ))
 sapply(n,haram)
-####Q6
+### Question 6
 ####chart 
 plot(n,sapply(n,haram),type="l")
 
