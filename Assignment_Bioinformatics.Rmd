@@ -223,14 +223,22 @@ seqinr::write.fasta(tophit,names=names(tophit),file.out = "tophit.fa")
 makeblastdb("tophit.fa",dbtype="nucl", "-parse_seqids")
 res <- myblastn(myseq = SAMPLE, db = "tophit.fa")
 cat(res,fill=TRUE)
+<<<<<<< HEAD
 ####mutator function
+=======
+#### mutator function
+>>>>>>> 2f8aeec5cc8303f7255ea62bb9dfd6c3928ed0bf
 mutator
 sam_mut <- mutator(myseq=sam,100)
 sam_mut_ <- DNAString(c2s(sam_mut))
 sam_ <- DNAString(c2s(sam))
 aln <- Biostrings::pairwiseAlignment(sam_,sam_mut_)
 pid(aln)
+<<<<<<< HEAD
 ####number of mismatches
+=======
+#### number of mismatches
+>>>>>>> 2f8aeec5cc8303f7255ea62bb9dfd6c3928ed0bf
 nmismatch(aln)
 
 write.fasta(sam,names="sam",file.out = "sam.fa")
@@ -251,8 +259,6 @@ mean(replicate(50, kopp(sam,100) ))
 n<-c(30,60,90,120)
 haram<-function(n)mean(replicate(50, kopp(sam,100) ))
 sapply(n,haram)
-x <- as.data.frame(x)
 
-then head(x)
 
-#demo1.1 dfdf
+
